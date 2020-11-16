@@ -1,8 +1,9 @@
-const bcrypt = require('bcrypt')
-const jwt =  require('jsonwebtoken')
-const User = require('../models/User')
-
+const bcrypt = require('bcrypt');
+const jwt =  require('jsonwebtoken');
+const User = require('../models/User');
+//Création d'un Utilisateur
 exports.signup = (req, res, next) => {
+  //Cryptage du mot de passe
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
@@ -15,7 +16,7 @@ exports.signup = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
-
+//Connexion d'un Utilisateur
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
@@ -27,6 +28,7 @@ exports.login = (req, res, next) => {
             if (!valid) {
               return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
+            //Création d'un token de connexion
             res.status(200).json({
               userId: user._id,
               token: jwt.sign(
