@@ -3,14 +3,11 @@ const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
   const thingObject = JSON.parse(req.body.sauce);
-  //delete thingObject._id;
   const thing = new Sauce({
     ...thingObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     likes: 0,
     dislikes: 0,
-    /*usersLiked: [],
-    usersDisliked: []*/
   });
   thing.save()
     .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
