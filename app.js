@@ -6,8 +6,7 @@ const userRoutes = require('./routes/user');
 const helmet = require("helmet");
 const path = require('path');
 require('dotenv').config();
-
-
+//Connexion à MongoDB
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.cnpph.mongodb.net/test?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
@@ -15,9 +14,9 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PA
   })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
+  
 const app = express();
-
+//Configuration des headers
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

@@ -60,49 +60,54 @@ exports.getAllStuff = (req, res, next) => {
 exports.noteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
+      
       if (req.body.like === 1) {
+        //Ajout d'un like
         sauce.usersLiked.push(req.body.userId);
         sauce.likes += req.body.like;
-        const test = {
+        let liked = {
           usersLiked: sauce.usersLiked,
           likes: sauce.likes
         };
-        Sauce.updateOne({ _id: req.params.id }, { ...test, _id: req.params.id })
+        Sauce.updateOne({ _id: req.params.id }, { ...liked, _id: req.params.id })
           .then(() => res.status(200).json({ message: '+1' }))
           .catch(error => res.status(400).json({ error }));
       } else if (req.body.like === 0) {
+        //Suppression d'un like
         let likeIndex = sauce.usersLiked.indexOf(req.body.userId);
         let dislikeIndex = sauce.usersDisliked.indexOf(req.body.userId);
         if (likeIndex > -1) {
           sauce.usersLiked.splice(likeIndex, 1);
           sauce.likes -= 1;
-          const test = {
+          let liked = {
             usersLiked: sauce.usersLiked,
             likes: sauce.likes
           };
-          Sauce.updateOne({ _id: req.params.id }, { ...test, _id: req.params.id })
+          Sauce.updateOne({ _id: req.params.id }, { ...liked, _id: req.params.id })
             .then(() => res.status(200).json({ message: 'aime plus' }))
             .catch(error => res.status(400).json({ error }));
         } else if (dislikeIndex > -1) {
+          //Suppression d'un dislike
           sauce.usersDisliked.splice(dislikeIndex, 1);
           sauce.dislikes -= 1;
-          const test = {
+          let disliked = {
             usersDisliked: sauce.usersDisliked,
             dislikes: sauce.dislikes
           };
-          Sauce.updateOne({ _id: req.params.id }, { ...test, _id: req.params.id })
+          Sauce.updateOne({ _id: req.params.id }, { ...disliked, _id: req.params.id })
             .then(() => res.status(200).json({ message: '-1' }))
             .catch(error => res.status(400).json({ error }));
         }
 
       } else if (req.body.like === -1) {
+        //Ajout d'un dislike
         sauce.usersDisliked.push(req.body.userId);
         sauce.dislikes -= req.body.like;
-        const test = {
+        let disliked = {
           usersDisliked: sauce.usersDisliked,
           dislikes: sauce.dislikes
         };
-        Sauce.updateOne({ _id: req.params.id }, { ...test, _id: req.params.id })
+        Sauce.updateOne({ _id: req.params.id }, { ...disliked, _id: req.params.id })
           .then(() => res.status(200).json({ message: '-1' }))
           .catch(error => res.status(400).json({ error }));
       };
