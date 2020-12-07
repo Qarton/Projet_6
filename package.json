@@ -15,7 +15,8 @@
     "express": "^4.17.1",
     "helmet": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.11",
+    "maskdata": "^1.1.2",
+    "mongoose": "^5.11.3",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.4.2",
     "parser": "^0.1.4"
