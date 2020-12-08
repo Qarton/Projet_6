@@ -1,9 +1,18 @@
 const bcrypt = require('bcrypt');
 const jwt =  require('jsonwebtoken');
 const User = require('../models/User');
+require('dotenv').config();
+const { validationResult } = require('express-validator');
+
 
 //Création d'un Utilisateur
 exports.signup = (req, res, next) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   //Cryptage du mot de passe
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -19,6 +28,12 @@ exports.signup = (req, res, next) => {
 };
 //Connexion d'un Utilisateur
 exports.login = (req, res, next) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
@@ -34,7 +49,7 @@ exports.login = (req, res, next) => {
               userId: user._id,
               token: jwt.sign(
                 {userId: user._id},
-                'RANDOM',
+                `${process.env.TOKEN}`,
                 {expiresIn: '24h'}
               )
             });

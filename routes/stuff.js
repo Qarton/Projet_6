@@ -3,9 +3,8 @@ const router = express.Router();
 const stuffCtrl = require('../controllers/stuff');
 const auth = require ('../middleware/auth');
 const multer = require('../middleware/multer-config');
-
 //Route pour la gestion de l'affichage des sauces
-router.get('/', stuffCtrl.getAllStuff);
+router.get('/', auth, stuffCtrl.getAllStuff);
 router.get('/:id',  auth, stuffCtrl.getOneSauce);
 
 //Route pour la gestion de l'ajout, modification et suppression
